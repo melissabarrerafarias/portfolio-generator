@@ -1,33 +1,15 @@
 const fs = require('fs');
+const generatePage = require('./src/page-template.js');
 
 const profileDataArgs = process.argv.slice(2);
 
 const [name, github] = profileDataArgs;
 
-const generatePage = (name, github) => {
-    return `
-    <!DOCTYPE html> 
-    <html lang="en"> 
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta http-equiv="X-UA-Compatible" content="ie=edge">
-      <title>Portfolio Demo</title>
-    </head>
-  
-    <body>
-      <h1>${name}</h1>
-      <h2><a href="https://github.com/${github}">Github</a></h2>
-    </body>
-    </html>
-    `; 
-  };
-  
-  fs.writeFile('./index.html', generatePage(name, github), err => {
-    if (err) throw err; 
-    
-    console.log('Portfolio complete! Check out index.html to see the output!')
-  });
+fs.writeFile('./index.html', generatePage(name, github), err => {
+  if (err) throw err;
+
+  console.log('Portfolio complete! Check out index.html to see the output!')
+});
 
 
 
@@ -128,3 +110,6 @@ const generatePage = (name, github) => {
 // the require statement is a built-in function that's globally available in Node.js. It allows the app.js file to access the fs module's functions through the fs assignment. It is a common misconception that
 // because modules like fs are a part of the Node.js core library, they're gloablly available. They are not. Using Node.js modular system, we can selectively choose which modules we need (using require) and avoid
 // slowing down our app with modules we don't. 
+
+// In order to use functions from one module inside another, we use the related statements module.exports and require. In the source file that has the functions we want to make available 
+// to other files, we use module.exports at its bottom. In the destination file(s) that we want to recieve those exported functions, we put require at the top. 
