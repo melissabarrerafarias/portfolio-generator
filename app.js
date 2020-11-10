@@ -1,14 +1,12 @@
-const profileDataArgs = process.argv.slice(2, process.argv.length);
+const generatePage = (userName, githubName) => {
+    return `
+      Name: ${userName}
+      GitHub: ${githubName}
+    `;
+  };
+console.log(generatePage('Jane', 'janehub'));
 
-const printProfileData = profileDataArr => {
-    for (let i = 0; i < profileDataArr.length; i += 1) {
-        console.log(profileDataArr[i]);
-    }
-    console.log("===============");
 
-    profileDataArr.forEach(profileItem => console.log(profileItem));
-};
-printProfileData(profileDataArgs);
 
 // "process" is a global object that represents everything going on with this particular app. similar to "document" and "window" in the browser. "argv", short for "argument values", 
 // is a property of "process" is an array that holds whatever was typed into the command line.
@@ -50,3 +48,33 @@ printProfileData(profileDataArgs);
 
 // .forEach() is a method that accepts a function as an argument and executes that function on each element of the array, using the value of the element at that iteration as its argument.
 // it is the exact same thing as using a for loop to iterate through an array. 
+
+// code from lesson 9.1
+// const profileDataArgs = process.argv.slice(2, process.argv.length);
+
+// const printProfileData = profileDataArr => {
+//     for (let i = 0; i < profileDataArr.length; i += 1) {
+//         console.log(profileDataArr[i]);
+//     }
+//     console.log("===============");
+
+//     profileDataArr.forEach(profileItem => console.log(profileItem));
+// };
+// printProfileData(profileDataArgs);
+
+
+
+// this function generates a string 
+// const generatePage = () => 'Name: Jane, GitHub: janehub';
+// parentheses are unnecessary in arrow functions when there is one parameter. In this functon, which has no parameters, we need parentheses to hold the place where parameters would have been. 
+
+// template literals are enclosed by backticks (`) instead of double or single quotes. 
+// const generatePage = (userName, githubName) => `Name: ${userName}, Github: ${githubName}`;
+// with these, we can wrap the string in backticks and interpolate the variables with the ${<variable>} syntax. What's great about template literals is we are allowed to multi-line text: 
+// const generatePage = (userName, githubName) => {
+//   return `
+//   Name: ${userName}
+//   GitHub: ${githubName}
+// `;
+// };
+// 
