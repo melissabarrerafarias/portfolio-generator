@@ -1,10 +1,33 @@
-const generatePage = (userName, githubName) => {
+const fs = require('fs');
+
+const profileDataArgs = process.argv.slice(2);
+
+const [name, github] = profileDataArgs;
+
+const generatePage = (name, github) => {
     return `
-      Name: ${userName}
-      GitHub: ${githubName}
-    `;
+    <!DOCTYPE html> 
+    <html lang="en"> 
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta http-equiv="X-UA-Compatible" content="ie=edge">
+      <title>Portfolio Demo</title>
+    </head>
+  
+    <body>
+      <h1>${name}</h1>
+      <h2><a href="https://github.com/${github}">Github</a></h2>
+    </body>
+    </html>
+    `; 
   };
-console.log(generatePage('Jane', 'janehub'));
+  
+  fs.writeFile('./index.html', generatePage(name, github), err => {
+    if (err) throw err; 
+    
+    console.log('Portfolio complete! Check out index.html to see the output!')
+  });
 
 
 
@@ -78,3 +101,30 @@ console.log(generatePage('Jane', 'janehub'));
 // `;
 // };
 // 
+
+
+// almost all programming languages have an interface to the computer's file system. The file system is the part of the computer's operating system that handles reading and writing files to persistent storage, 
+// such as a hard drive.
+
+// Node.js has modules we can use. Modules can be a function, a class, an object, or simple variables. File system (which we are using here) is considered a module. 
+
+
+// the fs.writeFile() has three arguments. The first argument is the name of the file that's being created. The next argument is the data that will write onto the file, in this case the HTML template literal.
+// the last paramter is a callback function that will be used for error handling. example: 
+
+// fs.writeFile('index.html', generatePage(name, github), err => {
+//   if (err) throw err; 
+//   console.log('Portfolio complete! Check out index.html to see the output!')
+// });
+
+//  in the callback function block, a conditional statement checks for the err being returned by the callback function. If err exists, an error message is displayed. Rather than silently displaying the error
+// with console.log(err;) the preceding statement creates an exception and stops the execution of the code. If you were to receive the error, you'd likely get "TypeError [ERROR_INVALID_CALLBACK]: 
+// Callback must be a function. Received undefined". This message concatenates two text properties of the Error object that is returned, name and message. In this case, name is the "TypeError", and message
+// is "Callback must be a function. Recieved undefined." It's important to know this, for you may wish to retrieve properties of the Error object while developing your applications, and these two are central
+// identifying problems. 
+
+
+// const fs = require('fs');
+// the require statement is a built-in function that's globally available in Node.js. It allows the app.js file to access the fs module's functions through the fs assignment. It is a common misconception that
+// because modules like fs are a part of the Node.js core library, they're gloablly available. They are not. Using Node.js modular system, we can selectively choose which modules we need (using require) and avoid
+// slowing down our app with modules we don't. 
