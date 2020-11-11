@@ -138,11 +138,20 @@ const promptProject = portfolioData => {
 promptUser()
   .then(promptProject)
   .then(portfolioData => {
-    const pageHTML = generatePage(portfolioData);
-
-    fs.writeFile('./index.html', generatePage(portfolioData), err => {
-      if (err) throw err;
-    });
+    return generatePage(portfolioData);
+  })
+  .then(pageHTML => {
+    return writeFile(pageHTML);
+  })
+  .then(writeFileResponse => {
+    console.log(writeFileResponse);
+    return copyFile();
+  })
+  .then(copyFileResponse => {
+    console.log(copyFileResponse);
+  })
+  .catch(err => {
+    console.log(err);
   });
 
 // "process" is a global object that represents everything going on with this particular app. similar to "document" and "window" in the browser. "argv", short for "argument values", 
@@ -264,3 +273,22 @@ promptUser()
 
 // To quickly search for a keyword on a webpage, type ctrl+f (Windows) or command+f (macOS) to open Chrome's search feature. Then type the keyword you're looking for (e.g., validate).
 // Chrome will highlight the results on the page. You can jump between them by typing ctrl+g (Windows) or command+g (macOS).
+
+
+// for the .copyFile() method, we need to provide three sets of data as function arguments: the source files' location, the copied files' intended destination and name, a callback function
+// to execute on either completion or error, which accepts an error object as a parameter so that we can check if something went wrong. example: 
+
+// fs.copyFile('./src/style.css', './dist/style.css', err => {
+//   if (err) {
+//     console.log(err);
+//     return;
+//   }
+//   console.log('Style sheet copied successfully!');
+// });
+
+// this code will find style.css in the src directory and create a copy of it in the dist directory. We can rename it to whatever we want upon copying it. If there's an error, we'll let the
+// user know and stop the copyFile() method from running with a return statement. 
+
+// we do we include the .copyFile() functionality? This is always important to consider when dealing with asynchronous code. We can have both of the fs functions run concurrently, because
+// one isn't dependent on the other, but that would make it harder for us to determine what went wrong if an error occurs. To execute the code in order, we have the fs.copyFile() functionality
+// occur inside the callback function for fs.writeFile(). This way we know that the .writeFile method successfully created the HTML file before we even attempt to copy the CSS file. 
