@@ -10,19 +10,129 @@ const inquirer = require('inquirer');
 
 //   console.log('Portfolio complete! Check out index.html to see the output!')
 // });
-
-inquirer
-  .prompt([
+const promptUser = () => {
+  return inquirer.prompt([
     {
       type: 'input',
       name: 'name',
-      message: 'What is your name?'
+      message: 'What is your name? (Required)',
+      validate: nameInput => {
+        if (nameInput) {
+          return true;
+        }
+        else {
+          console.log('Please enter your name!');
+        }
+      }
+    },
+    {
+      type: 'input',
+      name: 'github',
+      message: 'Enter your Github Username',
+      validate: usernameInput => {
+        if (usernameInput) {
+          return true;
+        }
+        else {
+          console.log('Please enter your username!');
+        }
+      }
+    },
+    {
+      type: 'input',
+      name: 'about',
+      message: 'Provide some information about yourself:'
+    }
+  ]);
+};
+
+const promptProject = portfolioData => {
+
+  // if there's no 'projects array property, create one
+  if (!portfolioData.projects) {
+    portfolioData.projects = [];
+  }
+
+  console.log(`
+  ==================
+  Add a New Project
+  ==================
+  `);
+  return inquirer.prompt([
+    {
+      type: 'input',
+      name: 'name',
+      message: 'What is the name of your project?',
+      validate: projectInput => {
+        if (projectInput) {
+          return true;
+        }
+        else {
+          console.log('Please enter your project name!');
+        }
+      }
+    },
+    {
+      type: 'input',
+      name: 'description',
+      message: 'Provide a description of the project (Required)',
+      validate: descriptionInput => {
+        if (descriptionInput) {
+          return true;
+        }
+        else {
+          console.log('Please enter a brief description!');
+        }
+      }
+    },
+    {
+      type: 'checkbox',
+      name: 'languages',
+      message: 'What did you build this project with? (Check all that apply)',
+      choices: ['Javascript', 'HTML', 'CSS', 'ES6', 'jQuery', 'Bootstrap', 'Node']
+    },
+    {
+      type: 'input',
+      name: 'link',
+      message: 'Enter the GitHub link to your project. (Required)',
+      validate: linkInput => {
+        if (linkInput) {
+          return true;
+        }
+        else {
+          console.log('Please enter the link!');
+        }
+      }
+    },
+    {
+      type: 'confirm',
+      name: 'feature',
+      message: 'Would you like to feature this project?',
+      default: false
+    },
+    {
+      type: 'confirm',
+      name: 'confirmAddProject',
+      message: 'Would you like to enter another project?',
+      default: false
     }
   ])
-  .then(answers => console.log(answers));
+    .then(projectData => {
+      portfolioData.projects.push(projectData);
+      if (projectData.confirmAddProject) {
+        return promptProject(portfolioData);
+      } else {
+        return portfolioData;
+      }
+    });
+}
 
 
-
+promptUser()
+  .then(promptProject)
+  .then(portfolioData => {
+    console.log(portfolioData);
+  });
 
 // "process" is a global object that represents everything going on with this particular app. similar to "document" and "window" in the browser. "argv", short for "argument values", 
 // is a property of "process" is an array that holds whatever was typed into the command line.
@@ -124,3 +234,22 @@ inquirer
 
 // In order to use functions from one module inside another, we use the related statements module.exports and require. In the source file that has the functions we want to make available 
 // to other files, we use module.exports at its bottom. In the destination file(s) that we want to recieve those exported functions, we put require at the top. 
+
+
+// const promptUser = () => {
+// return inquirer.prompt([
+//   {
+//     type: 'input',
+//     name: 'name',
+//     message: 'What is your name?'
+//   }
+// ]);
+// };
+// promptUser().then(answers => console.log(answers));
+// ^ here we are calling a function that returns the result of inquire.prompt, which is a Promise. We therefore append the .then() method to the function call, since it returns a Promise, and 
+// we put into .then() whatever we with to take place after the Promise is resolved. This allows the function to have a single responsibility: to promt the user. The Promise from the inquirer
+// can now be handled by the function call, which helps maintain best practices. 
+
+
+// To quickly search for a keyword on a webpage, type ctrl+f (Windows) or command+f (macOS) to open Chrome's search feature. Then type the keyword you're looking for (e.g., validate).
+// Chrome will highlight the results on the page. You can jump between them by typing ctrl+g (Windows) or command+g (macOS).
