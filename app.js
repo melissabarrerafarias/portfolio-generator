@@ -13,6 +13,9 @@ fs.writeFile('./index.html', generatePage(name, github), err => {
 
 
 
+
+
+
 // "process" is a global object that represents everything going on with this particular app. similar to "document" and "window" in the browser. "argv", short for "argument values", 
 // is a property of "process" is an array that holds whatever was typed into the command line.
 
