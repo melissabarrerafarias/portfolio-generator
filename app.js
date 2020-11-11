@@ -1,6 +1,6 @@
 const inquirer = require('inquirer');
 
-const fs = require('fs');
+const { writeFile, copyFile } = require('./utils/generate-site.js');
 const generatePage = require('./src/page-template.js');
 
 
@@ -153,6 +153,22 @@ promptUser()
   .catch(err => {
     console.log(err);
   });
+
+
+  // ^ how this function works: 
+  // First, we ask the user for their info with Inquirer prompts, this returns all of the data as an object in a Promise. 
+
+  // Then, the promptProject() function captures the returning data from promptUser() and we recursivley call promptProject() for as many projects as the user wants to add. Each project being 
+  // pushed into the projects array in the collection of portfolio info, and when we are done, the final set of data is returned to the next .then(). 
+
+  // After that, the finished portfolio data object is returned as portfolioData and sent into generatePage() function, which will return the finished HTML template code into pageHTML.
+
+  // Then we pass pageHTML into a newly created writeFile() function, which returns a Promise. This is why we use return here, so the Promise is returned into the next .then() method. 
+
+  // Upon successful file creation, we take the writeFileResponse object provided by the writeFile() function's resolve() execution to log it, and then we return copyFile(). 
+
+  // The Promise returned by copyFile() then lets us know if the CSS file was copied correctly, and if so, we are all done!
+
 
 // "process" is a global object that represents everything going on with this particular app. similar to "document" and "window" in the browser. "argv", short for "argument values", 
 // is a property of "process" is an array that holds whatever was typed into the command line.
